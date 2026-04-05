@@ -10,12 +10,11 @@ namespace MyFirstApi.Controllers
     [Route("/api/products")]
     public class ProductController : ControllerBase
     {
-        //string connStr = @"Data Source=Nazarbek\MSSQLSERVER01;InitialCatalog=DatabaseNomi;Integrated Security=True;MultipleActiveResultSets=True;TrustServerCertificate=True;";
+        // public string connStr = "Data Source=Nazarbek\\MSSQLSERVER01;Initial Catalog=NorthWindDb;Integrated Security=True;TrustServerCertificate=True;MultipleActiveResultSets=True;";
         public IDbConnection conn = new SqlConnection("Data Source=Nazarbek\\MSSQLSERVER01;Initial Catalog=NorthWindDb;Integrated Security=True;TrustServerCertificate=True;MultipleActiveResultSets=True;");
 
         //Get All Products
 
-       
         [HttpGet]
         public async Task<IEnumerable<Product>> GetAllProducts()
         {
@@ -53,10 +52,19 @@ namespace MyFirstApi.Controllers
         public async Task<bool> UpdateProductById(int id, Product product)
         {
             string query = "update Products set ProductName = @ProductName, QuantityPerUnit = @QuantityPerUnit, UnitPrice = @UnitPrice where ProductID = @ProductID";
-            int rowsAffected  = await conn.ExecuteAsync(query, product);
-            if(rowsAffected > 0) return true;
+            int rowsAffected = await conn.ExecuteAsync(query, product);
+            if (rowsAffected > 0) return true;
             else return false;
         }
+        // Delete Product
+        [HttpDelete("{id}")]
+        public async Task<bool> DeleteProductById(int id)
+        {
+            string query = "delete from Products where ProductID = @Id";
+            int rowsAffected = await conn.ExecuteAsync(query, new { Id = id });
+            if (rowsAffected > 0) return true;
+            else return false;
 
+        }
     }
 }
