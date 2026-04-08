@@ -9,20 +9,20 @@ Bu C# tilida yozilgan Api loyihasidir
 ## Requestlar va Api dan kelgan Response larning Postmanda ko'rinishi👇:
 **Product modeli uchun Response and Request:**
 
-*GetAll:**
-![GetAll](Assets/GetAll.png))
+*GetAll:*
+![GetAll](Assets/GetAll.png)
 
 *GetByID:*
-![GetById](Assets/GetByID.png))
+![GetById](Assets/GetByID.png)
 
 *Create:*
-![Create](Assets/Create.png))
+![Create](Assets/Create.png)
 
 *Update:*
-![Update](Assets/UpdateByID.png))
+![Update](Assets/UpdateByID.png)
 
 *Delete:*
-![Delete](Assets/DeleteByID.png))
+![Delete](Assets/DeleteByID.png)
 
 ---
 
