@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using MyFirstApi.Models;
+using MyFirstApi.Services;
 using System.Data;
 
 namespace MyFirstApi.Controllers
@@ -10,17 +11,17 @@ namespace MyFirstApi.Controllers
     [Route("/api/products")]
     public class ProductController : ControllerBase
     {
-        // public string connStr = "Data Source=Nazarbek\\MSSQLSERVER01;Initial Catalog=NorthWindDb;Integrated Security=True;TrustServerCertificate=True;MultipleActiveResultSets=True;";
-        public IDbConnection conn = new SqlConnection("Data Source=Nazarbek\\MSSQLSERVER01;Initial Catalog=NorthWindDb;Integrated Security=True;TrustServerCertificate=True;MultipleActiveResultSets=True;");
-
+        private readonly IProductService _productService;
+        public ProductController(IProductService productService)
+        {
+            _productService = productService;
+        }
         //Get All Products
 
         [HttpGet]
         public async Task<IEnumerable<Product>> GetAllProducts()
         {
-            string query = "SELECT ProductID, ProductName, QuantityPerUnit, UnitPrice FROM Products";
-            IEnumerable<Product> products = await conn.QueryAsync<Product>(query);
-            return products;
+            return await _productService.GetAllProductsAsync();
         }
 
         // Get Product By Id
@@ -28,9 +29,7 @@ namespace MyFirstApi.Controllers
         [HttpGet("{id}")]
         public async Task<Product> GetProductById(int id)
         {
-            string query = "SELECT ProductID, ProductName, QuantityPerUnit, UnitPrice FROM Products WHERE ProductID = @Id";
-            Product product = await conn.QueryFirstOrDefaultAsync<Product>(query, new { Id = id });
-            return product;
+            return await _productService.GetProductByIdAsync(id);
         }
 
         // Add Product
@@ -38,12 +37,7 @@ namespace MyFirstApi.Controllers
         [HttpPost]
         public async Task<bool> AddProductBy(Product product)
         {
-            string query = "insert into Products(ProductName, QuantityPerUnit, UnitPrice) values(@ProductName, @QuantityPerUnit, @UnitPrice)";
-
-            int rowsAffected = await conn.ExecuteAsync(query, product);
-
-            if (rowsAffected > 0) return true;
-            else return false;
+            return await _productService.CreateProductAsync(product);
         }
 
         // Update Product
@@ -51,20 +45,13 @@ namespace MyFirstApi.Controllers
         [HttpPut("{id}")]
         public async Task<bool> UpdateProductById(int id, Product product)
         {
-            string query = "update Products set ProductName = @ProductName, QuantityPerUnit = @QuantityPerUnit, UnitPrice = @UnitPrice where ProductID = @ProductID";
-            int rowsAffected = await conn.ExecuteAsync(query, product);
-            if (rowsAffected > 0) return true;
-            else return false;
+            return await _productService.UpdateProductAsync(product);
         }
         // Delete Product
         [HttpDelete("{id}")]
         public async Task<bool> DeleteProductById(int id)
         {
-            string query = "delete from Products where ProductID = @Id";
-            int rowsAffected = await conn.ExecuteAsync(query, new { Id = id }); 
-            if (rowsAffected > 0) return true;
-            else return false;
-
+            return await _productService.DeleteProductAsync(id);
         }
     }
 }

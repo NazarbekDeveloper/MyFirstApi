@@ -1,32 +1,42 @@
 ﻿using MyFirstApi.Models;
+using MyFirstApi.Repositories;
 
 namespace MyFirstApi.Services
 {
     public class ProductService : IProductService
     {
-        public Task<bool> CreateProductAsync(Product product)
+        private readonly IProductRepository _productRepository;
+        public ProductService(IProductRepository productRepository)
         {
-            throw new NotImplementedException();
+            _productRepository = productRepository;
+        }
+        public async Task<bool> CreateProductAsync(Product product)
+        {
+            if(product == null) throw new NullReferenceException("Product null bo'lishi mumkun emas");
+            return await _productRepository.CreateProductAsync(product);
         }
 
-        public Task<bool> DeleteProductAsync(int id)
+        public async Task<bool> DeleteProductAsync(int id)
         {
-            throw new NotImplementedException();
+            if(id <= 0) throw new ArgumentException("Id 0 va undan kichik bo'lishi mumkun emas");
+            return await _productRepository.DeleteProductAsync(id);
         }
 
-        public Task<IEnumerable<Product>> GetAllProductsAsync()
+        public async Task<IEnumerable<Product>> GetAllProductsAsync()
         {
-            throw new NotImplementedException();
+            return await _productRepository.GetAllProductsAsync();
         }
 
-        public Task<Product> GetProductByIdAsync(int id)
+        public async Task<Product> GetProductByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            if (id <= 0) throw new InvalidDataException("Id 0 va undan kichik bo'lishi mumkun emas");
+            return await _productRepository.GetProductByIdAsync(id);
         }
 
-        public Task<bool> UpdateProductAsync(Product product)
+        public async Task<bool> UpdateProductAsync(Product product)
         {
-            throw new NotImplementedException();
+            if (product == null) throw new NullReferenceException("yangilanayotgan product null bo'lishi mumkin emas");
+            return await _productRepository.UpdateProductAsync(product);
         }
     }
 }
