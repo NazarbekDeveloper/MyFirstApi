@@ -61,7 +61,7 @@ namespace MyFirstApi.Controllers
         public async Task<bool> DeleteProductById(int id)
         {
             string query = "delete from Products where ProductID = @Id";
-            int rowsAffected = await conn.ExecuteAsync(query, new { Id = id });
+            int rowsAffected = await conn.ExecuteAsync(query, new { Id = id }); 
             if (rowsAffected > 0) return true;
             else return false;
 
