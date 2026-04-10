@@ -1,3 +1,7 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.OpenApi;
+using Scalar.AspNetCore;
+
 namespace MyFirstApi
 {
     public class Program
@@ -11,7 +15,14 @@ namespace MyFirstApi
             builder.Services.AddTransient<Services.IEmployeeService, Services.EmployeeService>();
             builder.Services.AddTransient<Repositories.IProductRepository, Repositories.ProductRepository>();
             builder.Services.AddTransient<Services.IProductService, Services.ProductService>();
+            builder.Services.AddOpenApi();
             var app = builder.Build();
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.MapOpenApi(); // OpenAPI hujjatini generatsiya qilish
+                app.MapScalarApiReference(); // Scalar interfeysini ochish
+            }
 
             app.MapControllers();
 

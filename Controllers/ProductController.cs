@@ -19,39 +19,44 @@ namespace MyFirstApi.Controllers
         //Get All Products
 
         [HttpGet]
-        public async Task<IEnumerable<Product>> GetAllProducts()
+        public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
         {
-            return await _productService.GetAllProductsAsync();
+            var result =  await _productService.GetAllProductsAsync();
+            return Ok(result);
         }
 
         // Get Product By Id
 
         [HttpGet("{id}")]
-        public async Task<Product> GetProductById(int id)
+        public async Task<ActionResult<Product>> GetProductById(int id)
         {
-            return await _productService.GetProductByIdAsync(id);
+            var result =  await _productService.GetProductByIdAsync(id);
+            return Ok(result);
         }
 
         // Add Product
 
         [HttpPost]
-        public async Task<bool> AddProductBy(Product product)
+        public async Task<ActionResult<bool>> AddProductBy(Product product)
         {
-            return await _productService.CreateProductAsync(product);
+            var result =  await _productService.CreateProductAsync(product);
+            return (result)? Ok(result) : BadRequest("Product qo'shishda xatolik yuz berdi");
         }
 
         // Update Product
 
         [HttpPut("{id}")]
-        public async Task<bool> UpdateProductById(int id, Product product)
+        public async Task<ActionResult<bool>> UpdateProductById(int id, Product product)
         {
-            return await _productService.UpdateProductAsync(product);
+            var result =  await _productService.UpdateProductAsync(product);
+            return (result) ? Ok(result) : BadRequest("Product yangilashda xatolik yuz berdi");
         }
         // Delete Product
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteProductById(int id)
+        public async Task<ActionResult<bool>> DeleteProductById(int id)
         {
-            return await _productService.DeleteProductAsync(id);
+            var result =  await _productService.DeleteProductAsync(id);
+            return (result) ? Ok(result) : BadRequest("Product o'chirishda xatolik yuz berdi");
         }
     }
 }
